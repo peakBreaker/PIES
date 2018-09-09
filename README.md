@@ -1,4 +1,4 @@
-# Peakbreaker Install Auto Scripts (PIES)
+# Peakbreaker Install Endless Scripts (PIES)
 
 **Basically this is a repo for autoinstalling packages and whatnot**
 

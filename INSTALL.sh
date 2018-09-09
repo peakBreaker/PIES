@@ -1,4 +1,4 @@
-#!/USR/BIn/env bash
+#!/usr/bin/env bash
 # vim: set nowrap:
 # vim: set foldmethod=marker
 
