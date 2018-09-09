@@ -37,9 +37,44 @@ finalize(){ \
 	}
 
 ### }}}
+### USER MANAGEMENT ------------------------------------------------- {{{
+
+getuserandpass() { \
+	# Prompts user for new username an password.
+	# Checks if username is valid and confirms passwd.
+	name=$(dialog --inputbox "First, please enter a name for the user account. Curr UID : $EUID" 10 60 3>&1 1>&2 2>&3 3>&1) || exit
+	namere="^[a-z_][a-z0-9_-]*$"
+	while ! [[ "${name}" =~ ${namere} ]]; do
+		name=$(dialog --no-cancel --inputbox "Username not valid. Give a username beginning with a letter, with only lowercase letters, - or _." 10 60 3>&1 1>&2 2>&3 3>&1)
+	done
+	pass1=$(dialog --no-cancel --passwordbox "Enter a password for that user." 10 60 3>&1 1>&2 2>&3 3>&1)
+	pass2=$(dialog --no-cancel --passwordbox "Retype password." 10 60 3>&1 1>&2 2>&3 3>&1)
+	while ! [[ ${pass1} == ${pass2} ]]; do
+		unset pass2
+		pass1=$(dialog --no-cancel --passwordbox "Passwords do not match.\\n\\nEnter password again." 10 60 3>&1 1>&2 2>&3 3>&1)
+		pass2=$(dialog --no-cancel --passwordbox "Retype password." 10 60 3>&1 1>&2 2>&3 3>&1)
+	done ;}
+
+### }}}
 ### INSTALL FUNCTIONS ----------------------------------------------- {{{
 
-# function for 
+refreshkeys() { \
+	dialog --infobox "Refreshing Arch Keyring..." 4 40
+	pacman --noconfirm -Sy archlinux-keyring &>/dev/null
+	}
+
+# Downlods a gitrepo $1 and places the files in $2 only overwriting conflicts
+putgitrepo()
+{ 
+	dialog --infobox "Downloading and installing config files..." 4 60
+	dir=$(mktemp -d)
+	chown -R "$name":wheel "$dir"
+	sudo -u "$name" git clone --depth 1 "$1" "$dir"/gitrepo &>/dev/null &&
+	sudo -u "$name" mkdir -p "$2" &&
+	sudo -u "$name" cp -rT "$dir"/gitrepo "$2"
+}
+
+# Function for installing from package repos
 maininstall() 
 {
 	dialog --title "PIES Installation" --infobox "Installing \`$1\` ($n of $total). $1 $2." 5 70
@@ -50,6 +85,7 @@ maininstall()
     fi
 }
 
+# Main install function for packages
 installationloop() 
 {
 	([ -f "$progsfile" ] && cp "$progsfile" /tmp/progs.csv) || curl -Ls "$progsfile" > /tmp/progs.csv
@@ -78,8 +114,22 @@ welcomemsg || { clear; exit; }
 # Last chance for user to back out before install.
 preinstallmsg || { clear; exit; }
 
+# User management
+if [ $(logname) = "root" ]; then
+    # Means we're root - prompt username & pass
+    getuserandpass
+    # Give warning if user already exists.
+    usercheck || { clear; exit; }
+else
+    # means we're running as sudo, get curr username
+    name=$(logname)
+fi
+
 # Installs programs
 installationloop
+
+# Install the dotfiles in the user's home directory
+putgitrepo "$dotfilesrepo" "/home/$name"
 
 # Make pacman and yay colorful because why not.
 sed -i "s/#Color^/Color/g" /etc/pacman.conf
