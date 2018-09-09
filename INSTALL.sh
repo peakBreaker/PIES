@@ -59,6 +59,7 @@ installationloop()
       n=$((n+1))
       case "$tag" in
         "") maininstall "$program" "$comment" ;;
+        "C") echo "Skipping comment --" ;;
         "A") aurinstall "$program" "$comment" ;;
         "G") gitmakeinstall "$program" "$comment" ;;
       esac

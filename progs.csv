@@ -1,2 +1,49 @@
 META,IDENTIFIER,COMMENT
-,base-devel,is a basic package with essential software for linux
+C,# Essentials,-------------------
+,base-devel,basic essential packages (e.g. sudo)
+,networkmanager,handles network connection and wifi
+,pulseaudio,audio system
+,pulseaudio-alsa,audio interface with alsa
+,xorg-server,is the graphical server
+,xorg-xdpyinfo,retrieves screen information for some scripts
+,xorg-xinit,starts the graphical server
+,mesa,
+,cronie,manages scheduled tasks
+,git,is a version control system
+,arandr,is a UI for screen adjustment
+C,# Browsing,-------------------
+,firefox,browser
+C,# Window Manager & UI,-------------------
+,i3-gaps,is the main graphical user interface and window manager
+,i3blocks,is the status bar
+,i3lock,is the screen lock
+C,# Nice progams,-------------------
+,gimp,
+,arduino,
+,ranger,is an extensive terminal file manager that everyone likes
+,blender,3d funtimes
+,gvim,provides a build of vim with the ability to copy and paste between other programs
+C,# Other Utilities,-------------------
+,unrar,extracts rar's
+,unzip,unzips zips
+,tmux,is a terminal multiplexer
+,w3m,is a terminal browser which can also view images
+,wget,downloads sites and files on the command line
+,mediainfo,shows audio and video information and is used by ranger as well
+C,# Filesystems,-------------------
+,ntfs-3g,allows accessing NTFS partitions
+,dosfstools,allows your computer to access dos-like filesystems'
+,exfat-utils,allows management of FAT drives
+C,# Python,-------------------
+,python,
+,python-setuptools,
+,python-pywal,
+C,# Security,-------------------
+,openssh,
+,keepass,
+C,# Golang python,-------------------
+,python-gobject,
+,pygtk,
+,python-dbus,
+,python2-dbus,
+,nss-mdns,
