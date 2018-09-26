@@ -15,4 +15,6 @@ system for me.
 ![PIES](./PIES.png)
 
 ## Getting started
-Well theres nothing here yet, but it'll be here soon.
+```
+$ sudo bash $(curl -L https://raw.githubusercontent.com/peakBreaker/PIES/master/INSTALL.sh)
+```

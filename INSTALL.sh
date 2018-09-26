@@ -25,7 +25,7 @@ esac done
 initialcheck() { pacman -S --noconfirm --needed dialog || { echo "Check the following:\\n- Youre running an Arch based distro\\n- Youre running with root privelege\\n- Youre connected to network"; exit; } ;}
 
 preinstallmsg() { \
-   dialog --title "Pre-install" --yes-label "Install" --no-label "Exit" --yesno "The install will run with the following configurations: \\n\\n- dotfiles: $dotfilesrepo\\n- Programs file: $progsfile\\n- AurHelper: $aurhelper\\n- Simulated: $simulated" 10 60 || { clear; exit; }
+   dialog --title "Pre-install" --yes-label "Install" --no-label "Exit" --yesno "The install will run with the following configurations: \\n\\n- dotfiles: $dotfilesrepo\\n- Programs file: $progsfile\\n- AurHelper: $aurhelper\\n- Simulated: $simulated" 15 60 || { clear; exit; }
 	}
 
 welcomemsg() { \
@@ -72,6 +72,29 @@ putgitrepo()
 	sudo -u "$name" git clone --depth 1 "$1" "$dir"/gitrepo &>/dev/null &&
 	sudo -u "$name" mkdir -p "$2" &&
 	sudo -u "$name" cp -rT "$dir"/gitrepo "$2"
+}
+
+manualinstall() 
+{ # Installs $1 manually if not installed. Used only for AUR helper here.
+	[[ -f /usr/bin/$1 ]] || (
+		dialog --infobox "Installing \"$1\", an AUR helper..." 10 60
+		cd /tmp
+		rm -rf /tmp/"$1"*
+		curl -sO https://aur.archlinux.org/cgit/aur.git/snapshot/"$1".tar.gz &&
+		sudo -u "$name" tar -xvf "$1".tar.gz &>/dev/null &&
+		cd "$1" &&
+		sudo -u $name makepkg --noconfirm -si &>/dev/null
+		cd /tmp) ;
+}
+
+
+
+# Installs from AUR
+aurinstall() 
+{
+	dialog --title "LARBS Installation" --infobox "Installing \`$1\` ($n of $total) from the AUR. $1 $2." 5 70
+	grep "^$1$" <<< "$aurinstalled" && return
+	sudo -u $name $aurhelper -S --noconfirm "$1" &>/dev/null
 }
 
 # Function for installing from package repos
@@ -124,6 +147,9 @@ else
     # means we're running as sudo, get curr username
     name=$(logname)
 fi
+
+# Make sure we have aurhelper installed
+manualinstall $aurhelper
 
 # Installs programs
 installationloop
