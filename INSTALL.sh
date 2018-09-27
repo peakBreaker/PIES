@@ -76,10 +76,15 @@ refreshkeys()
 # Downlods a gitrepo $1 and places the files in $2 only overwriting conflicts
 putgitrepo()
 { 
-	dialog --infobox "Downloading and installing config files..." 4 60
+	dialog --infobox "Downloading and installing dotfiles..." 4 60
+
+    # Clone git repo to temporary location
 	dir=$(mktemp -d)
 	chown -R "$name":wheel "$dir"
 	sudo -u "$name" git clone --depth 1 "$1" "$dir"/gitrepo &>/dev/null &&
+    sudo -u "$name" rm -rf "$dir"/gitrepo/.git
+
+    # Move over the files from the git repo to target
 	sudo -u "$name" mkdir -p "$2" &&
 	sudo -u "$name" cp -rT "$dir"/gitrepo "$2"
 }
