@@ -33,11 +33,12 @@ C,# Window Manager & UI,-------------------
 A,ttf-emojione, Gives us emojis
 
 C,# Nice progams,-------------------
-,gimp,
-,arduino,
+,gimp,GNU Photoshop!
+,arduino,Embedded prototyping platform
 ,ranger,is an extensive terminal file manager that everyone likes
 ,blender,3d funtimes
 ,gvim,provides a build of vim with the ability to copy and paste between other programs
+A,spotify,Music streaming application and service
 
 C,# Other Utilities,-------------------
 ,unrar,extracts rar's
