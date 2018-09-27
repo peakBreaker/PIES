@@ -1,0 +1,35 @@
+# vim: set foldmethod marker:
+
+# Essential utils
+networkmanager
+alsa-utils
+base-devel
+mesa
+git
+
+
+# Browsing
+chromium
+
+# Nice progams
+gimp
+arduino
+ranger
+tmux
+blender
+
+# Python
+python
+python-setuptools
+python-pywal
+
+# Security
+openssh
+keepass
+
+# Golang python
+python-gobject
+pygtk
+python-dbus
+python2-dbus
+nss-mdns
