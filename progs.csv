@@ -2,8 +2,6 @@ META,IDENTIFIER,COMMENT
 C,# Essentials,-------------------
 ,base-devel,basic essential packages (e.g. sudo)
 ,networkmanager,handles network connection and wifi
-,pulseaudio,audio system
-,pulseaudio-alsa,audio interface with alsa
 ,xorg-server,is the graphical server
 ,xorg-xdpyinfo,retrieves screen information for some scripts
 ,xorg-xinit,starts the graphical server
@@ -11,8 +9,19 @@ C,# Essentials,-------------------
 ,cronie,manages scheduled tasks
 ,git,is a version control system
 ,arandr,is a UI for screen adjustment
-,bluez,Bluetooth core
 
+C,# Audio Systems,-------------------
+,pulseaudio,audio system
+,pulseaudio-alsa,audio interface with alsa
+,pamixer,Terminal audio control interface
+,pulsemixer,ncurses audio controller
+
+C,# Bluetooth,-------------------
+,bluez,Bluetooth core
+,bluez-libs,Dependency libs for the bluetooth protocol stack
+,bluez-utils,Dev&Debug utils for the bluetooth protocol stack
+,blueman,Bluetooth front end
+,pulseaudio-bluetooth,Bluetooth support for pulseaudio
 
 C,# Browsing,-------------------
 ,firefox,browser

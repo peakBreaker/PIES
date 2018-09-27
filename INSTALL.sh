@@ -39,7 +39,8 @@ finalize(){ \
 ### }}}
 ### USER MANAGEMENT ------------------------------------------------- {{{
 
-getuserandpass() { \
+getuserandpass() 
+{
 	# Prompts user for new username an password.
 	# Checks if username is valid and confirms passwd.
 	name=$(dialog --inputbox "First, please enter a name for the user account. Curr UID : $EUID" 10 60 3>&1 1>&2 2>&3 3>&1) || exit
@@ -53,15 +54,24 @@ getuserandpass() { \
 		unset pass2
 		pass1=$(dialog --no-cancel --passwordbox "Passwords do not match.\\n\\nEnter password again." 10 60 3>&1 1>&2 2>&3 3>&1)
 		pass2=$(dialog --no-cancel --passwordbox "Retype password." 10 60 3>&1 1>&2 2>&3 3>&1)
-	done ;}
+	done ;
+}
+
+# Adds user to relevant groups and other user housekeeping
+manageuser()
+{
+    usermod -a -G lp $1
+}
 
 ### }}}
 ### INSTALL FUNCTIONS ----------------------------------------------- {{{
 
-refreshkeys() { \
+# Update the arch package manager keyring
+refreshkeys()
+{
 	dialog --infobox "Refreshing Arch Keyring..." 4 40
 	pacman --noconfirm -Sy archlinux-keyring &>/dev/null
-	}
+}
 
 # Downlods a gitrepo $1 and places the files in $2 only overwriting conflicts
 putgitrepo()
@@ -74,8 +84,9 @@ putgitrepo()
 	sudo -u "$name" cp -rT "$dir"/gitrepo "$2"
 }
 
+# Manual installs from HTTP, used only for AUR helper for now
 manualinstall() 
-{ # Installs $1 manually if not installed. Used only for AUR helper here.
+{
 	[[ -f /usr/bin/$1 ]] || (
 		dialog --infobox "Installing \"$1\", an AUR helper..." 10 60
 		cd /tmp
@@ -86,8 +97,6 @@ manualinstall()
 		sudo -u $name makepkg --noconfirm -si &>/dev/null
 		cd /tmp) ;
 }
-
-
 
 # Installs from AUR
 aurinstall() 
@@ -147,6 +156,7 @@ else
     # means we're running as sudo, get curr username
     name=$(logname)
 fi
+manageuser $name
 
 # Make sure we have aurhelper installed
 manualinstall $aurhelper
