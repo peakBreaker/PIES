@@ -3,13 +3,13 @@
 # vim: set foldmethod=marker
 
 ### COMMAND LINE ARGS AND VARIABLES --------------------------------- {{{
-
-while getopts ":a:r:p:hs" o; do case "${o}" in
-	h) echo -e "Optional arguments for custom use:\\n  -s simulate the install\\n  -r: Dotfiles repository (local file or url)\\n  -p: Dependencies and programs csv (local file or url)\\n  -a: AUR helper (must have pacman-like syntax)\\n  -h: Show this message" && exit ;;
+while getopts ":a:r:p:hs:hd" o; do case "${o}" in
+	h) echo -e "Optional arguments for custom use:\\n  -s simulate the install\\n  -r: Dotfiles repository (local file or url)\\n  -p: Dependencies and programs csv (local file or url)\\n  -a: AUR helper (must have pacman-like syntax)\\n  -d: enable devmode (no ncurses)\\n  -h: Show this message" && exit ;;
 	r) dotfilesrepo=${OPTARG} && git ls-remote "$dotfilesrepo" || exit ;;
 	p) progsfile=${OPTARG} ;;
 	a) aurhelper=${OPTARG} ;;
 	s) simulated="true" ;;
+	d) devmode="true" ;;
 	*) echo "-$OPTARG is not a valid option." && exit ;;
 esac done
 
@@ -18,23 +18,31 @@ esac done
 [ -z ${progsfile+x} ] && progsfile="https://raw.githubusercontent.com/peakBreaker/PIES/master/progs.csv"
 [ -z ${aurhelper+x} ] && aurhelper="yay"
 [ -z ${simulated+x} ] && simulated="false"
+[ -z ${devmode+x} ] && devmode="false"
+
+echo "devmode is : $devmode"
+[[ $devmode = "true" ]] && echo "devmode is enabled!"
 
 ### }}}
 ## UI Handlers ------------------------------------------------------ {{{
 
-initialcheck() { pacman -S --noconfirm --needed dialog || { echo "Check the following:\\n- Youre running an Arch based distro\\n- Youre running with root privelege\\n- Youre connected to network"; exit; } ;}
+initialcheck() { pacman -S --noconfirm --needed dialog || { echo "Check the following:\\n- Youre running an Arch based distro\\n- Youre running with root privelege\\n- Youre connected to network"; exit; } ; }
 
-preinstallmsg() { \
-   dialog --title "Pre-install" --yes-label "Install" --no-label "Exit" --yesno "The install will run with the following configurations: \\n\\n- dotfiles: $dotfilesrepo\\n- Programs file: $progsfile\\n- AurHelper: $aurhelper\\n- Simulated: $simulated" 15 60 || { clear; exit; }
-	}
+preinstallmsg() {
+    [[ $devmode = "false" ]] && dialog --title "Pre-install" --yes-label "Install" --no-label "Exit" --yesno "The install will run with the following configurations: \\n\\n- dotfiles: $dotfilesrepo\\n- Programs file: $progsfile\\n- AurHelper: $aurhelper\\n- Simulated: $simulated" 15 60 && return
+    [[ $devmode = "true" ]] && echo -e "The install will run with the following configurations: \\n\\n- dotfiles: $dotfilesrepo\\n- Programs file: $progsfile\\n- AurHelper: $aurhelper\\n- Simulated: $simulated" 
+    #[[ $devmode = "true" ]] && read "Press any key to continue"
+}
 
-welcomemsg() { \
-	dialog --title "Welcome!" --msgbox "Welcome to the peakBreaker autoinstall - This script will install my fully featured development enviroment" 6 60
-	}
+welcomemsg() {
+    [[ $devmode = "false" ]] && dialog --title "Welcome!" --msgbox "Welcome to the peakBreaker autoinstall - This script will install my fully featured development enviroment" 6 60 && return
+    [[ $devmode = "true" ]] && echo "Welcome to this PIES development environment install!"
+}
 
-finalize(){ \
-    dialog --title "All done!" --msgbox "Installation finished.  Provided there were no errors, you should now have all packages in $progsfile installed" 6 80
-	}
+finalize() {
+    [[ $devmode = "false" ]] && dialog --title "All done!" --msgbox "Installation finished.  Provided there were no errors, you should now have all packages in $progsfile installed" 6 80 && return
+    [[ $devmode = "true" ]] && echo "Installation finished.  Provided there were no errors, you should now have all packages in $progsfile installed" 
+}
 
 ### }}}
 ### USER MANAGEMENT ------------------------------------------------- {{{
@@ -58,8 +66,7 @@ getuserandpass()
 }
 
 # Adds user to relevant groups and other user housekeeping
-manageuser()
-{
+manageuser() {
     usermod -a -G lp $1
 }
 
@@ -69,14 +76,14 @@ manageuser()
 # Update the arch package manager keyring
 refreshkeys()
 {
-	dialog --infobox "Refreshing Arch Keyring..." 4 40
+	[[ $devmode = "false" ]] && dialog --infobox "Refreshing Arch Keyring..." 4 40
 	pacman --noconfirm -Sy archlinux-keyring &>/dev/null
 }
 
 # Downlods a gitrepo $1 and places the files in $2 only overwriting conflicts
 putgitrepo()
 { 
-	dialog --infobox "Downloading and installing dotfiles..." 4 60
+	[[ $devmode = "false" ]] && dialog --infobox "Downloading and installing dotfiles..." 4 60
 
     # Clone git repo to temporary location
 	dir=$(mktemp -d)
@@ -93,20 +100,24 @@ putgitrepo()
 manualinstall() 
 {
 	[[ -f /usr/bin/$1 ]] || (
-		dialog --infobox "Installing \"$1\", an AUR helper..." 10 60
+		[[ $devmode = "false" ]] && dialog --infobox "Installing \"$1\", an AUR helper..." 10 60
+		[[ $devmode = "true" ]] && echo "Installing AUR helper : $1.."
 		cd /tmp
-		rm -rf /tmp/"$1"*
-		curl -sO https://aur.archlinux.org/cgit/aur.git/snapshot/"$1".tar.gz &&
-		sudo -u "$name" tar -xvf "$1".tar.gz &>/dev/null &&
-		cd "$1" &&
-		sudo -u $name makepkg --noconfirm -si &>/dev/null
+		rm -rf /tmp/$1*
+		[[ $devmode = "true" ]] && echo "Cleared the directory for download - proceeding to fetch AUR helper with http"
+
+		curl -sO https://aur.archlinux.org/cgit/aur.git/snapshot/"$1".tar.gz && \
+		sudo -u "$name" tar -xvf "$1".tar.gz &>/dev/null && \
+		cd "$1" && \
+		sudo -u $name makepkg --noconfirm -si &>/dev/null \
 		cd /tmp) ;
 }
 
 # Installs from AUR
 aurinstall() 
 {
-	dialog --title "LARBS Installation" --infobox "Installing \`$1\` ($n of $total) from the AUR. $1 $2." 5 70
+	[[ $devmode = "false" ]] && dialog --title "LARBS Installation" --infobox "Installing \`$1\` ($n of $total) from the AUR. $1 $2." 5 70
+    [[ $devmode = "true" ]] && echo "Installing \`$1\` ($n of $total) from the AUR. $1 $2." 
 	grep "^$1$" <<< "$aurinstalled" && return
 	sudo -u $name $aurhelper -S --noconfirm "$1" &>/dev/null
 }
@@ -114,11 +125,13 @@ aurinstall()
 # Function for installing from package repos
 maininstall() 
 {
-	dialog --title "PIES Installation" --infobox "Installing \`$1\` ($n of $total). $1 $2." 5 70
-    if [ $simulated = "false" ]; then
-	    pacman --noconfirm --needed -S "$1" &>/dev/null
+	[[ $devmode = "false" ]] && dialog --title "PIES Installation" --infobox "Installing \`$1\` ($n of $total). $1 $2." 5 70
+    [[ $devmode = "true" ]] && echo "Installing \`$1\` ($n of $total). $1 $2." 
+    if [ $simulated = "true" ]; then
+       sleep 2
     else
-        sleep 2
+      [[ $devmode = "false" ]] && pacman --noconfirm --needed -S "$1" &>/dev/null
+      [[ $devmode = "true" ]] && pacman --noconfirm --needed -S "$1"
     fi
 }
 
@@ -152,7 +165,7 @@ welcomemsg || { clear; exit; }
 preinstallmsg || { clear; exit; }
 
 # User management
-if [ $(logname) = "root" ]; then
+if [ $(logname) = "root" ]; then
     # Means we're root - prompt username & pass
     getuserandpass
     # Give warning if user already exists.
@@ -162,6 +175,7 @@ else
     name=$(logname)
 fi
 manageuser $name
+[[ -z $devmode ]] && dialog --title "Usercheck" --msgbox "Proceeding to install for user : $name" 6 60
 
 # Make sure we have aurhelper installed
 manualinstall $aurhelper
@@ -177,6 +191,5 @@ sed -i "s/#Color^/Color/g" /etc/pacman.conf
 
 # Last message! Install complete!
 finalize
-clear
-
+[[ $devmode = "false" ]] && clear
 ### }}}
