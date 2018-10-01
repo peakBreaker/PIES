@@ -9,6 +9,7 @@ C,# Essentials,-------------------
 ,cronie,manages scheduled tasks
 ,git,is a version control system
 ,arandr,is a UI for screen adjustment
+,rxvt-unicode,A terminal emulator
 
 C,# Audio Systems,-------------------
 ,pulseaudio,audio system
@@ -31,6 +32,7 @@ C,# Window Manager & UI,-------------------
 ,i3blocks,is the status bar
 ,i3lock,is the screen lock
 A,ttf-emojione, Gives us emojis
+,dmenu,Application launcher
 
 C,# Nice progams,-------------------
 ,gimp,GNU Photoshop!

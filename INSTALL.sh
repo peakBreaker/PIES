@@ -152,6 +152,15 @@ installationloop()
 	done < /tmp/progs.csv ;
 }
 
+# Some additional special installs
+additionalinstalls()
+{
+    # Install oh my zsh
+    [[ $devmode = "false" ]] && dialog --title "Additional Installation" --infobox "Installing oh-my-zsh through https" 5 70
+    [[ $devmode = "true" ]] && echo "Installing oh-my-zsh through https"
+    sudo -H -u $name sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+}
+
 ### }}}
 ### Actual Procedure calls ------------------------------------------ {{{
 
@@ -182,6 +191,9 @@ manualinstall $aurhelper
 
 # Installs programs
 installationloop
+
+# Additional installs
+additionalinstalls
 
 # Install the dotfiles in the user's home directory
 putgitrepo "$dotfilesrepo" "/home/$name"
