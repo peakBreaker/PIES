@@ -11,6 +11,9 @@ C,# Essentials,-------------------
 ,arandr,is a UI for screen adjustment
 ,rxvt-unicode,A terminal emulator
 
+C,# Libraries, ---------------------------------------------------------------
+,imlib2, library for loading images in the terminal (for ranger/w3m previews)
+
 C,# Audio Systems,-------------------
 ,pulseaudio,audio system
 ,pulseaudio-alsa,audio interface with alsa
@@ -49,6 +52,7 @@ C,# Other Utilities,-------------------
 ,w3m,is a terminal browser which can also view images
 ,wget,downloads sites and files on the command line
 ,mediainfo,shows audio and video information and is used by ranger as well
+A,watson,A time tracking cli program
 
 C,# Filesystems,-------------------
 ,ntfs-3g,allows accessing NTFS partitions

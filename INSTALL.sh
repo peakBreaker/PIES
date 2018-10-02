@@ -198,6 +198,9 @@ additionalinstalls
 # Install the dotfiles in the user's home directory
 putgitrepo "$dotfilesrepo" "/home/$name"
 
+# Enable services
+sudo systemctl enable bluetooth.service
+
 # Make pacman and yay colorful because why not.
 sed -i "s/#Color^/Color/g" /etc/pacman.conf
 
