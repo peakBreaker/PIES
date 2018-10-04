@@ -10,6 +10,7 @@ C,# Essentials,-------------------
 ,git,is a version control system
 ,arandr,is a UI for screen adjustment
 ,rxvt-unicode,A terminal emulator
+,ntp,Provides the ntpd for syncing clock
 
 C,# Libraries, ---------------------------------------------------------------
 ,imlib2, library for loading images in the terminal (for ranger/w3m previews)
@@ -39,6 +40,7 @@ A,ttf-emojione, Gives us emojis
 
 C,# Nice progams,-------------------
 ,gimp,GNU Photoshop!
+,scrot,Screenshot program
 ,arduino,Embedded prototyping platform
 ,ranger,is an extensive terminal file manager that everyone likes
 ,blender,3d funtimes
@@ -60,9 +62,11 @@ C,# Filesystems,-------------------
 ,exfat-utils,allows management of FAT drives
 
 C,# Python,-------------------
-,python,
-,python-setuptools,
-,python-pywal,
+,python,Python<3
+,python-setuptools,Package management for python
+,python-pywal,Styling system
+,python-virtualenv,Changing paths for python to avoid global dependencies
+,python-pip,python package manager (using official repos)
 
 C,# Security,-------------------
 ,openssh,
