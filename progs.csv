@@ -30,6 +30,7 @@ C,# Bluetooth,-------------------
 
 C,# Browsing,-------------------
 ,firefox,browser
+,qutebrowser,minimal vim based browser for devs
 
 C,# Window Manager & UI,-------------------
 ,i3-gaps,is the main graphical user interface and window manager
@@ -46,6 +47,9 @@ C,# Nice progams,-------------------
 ,blender,3d funtimes
 ,gvim,provides a build of vim with the ability to copy and paste between other programs
 A,spotify,Music streaming application and service
+A,slack-desktop,Messaging application
+,youtube-dl,Program for downloading youtube videos
+A,speedometer,Program for viewing rx/tx speed
 
 C,# Other Utilities,-------------------
 ,unrar,extracts rar's
