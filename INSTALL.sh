@@ -3,7 +3,7 @@
 # vim: set foldmethod=marker
 
 ### COMMAND LINE ARGS AND VARIABLES --------------------------------- {{{
-while getopts ":a:r:p:hs:hd" o; do case "${o}" in
+while getopts ":a:r:p:sd" o; do case "${o}" in
 	h) echo -e "Optional arguments for custom use:\\n  -s simulate the install\\n  -r: Dotfiles repository (local file or url)\\n  -p: Dependencies and programs csv (local file or url)\\n  -a: AUR helper (must have pacman-like syntax)\\n  -d: enable devmode (no ncurses)\\n  -h: Show this message" && exit ;;
 	r) dotfilesrepo=${OPTARG} && git ls-remote "$dotfilesrepo" || exit ;;
 	p) progsfile=${OPTARG} ;;
@@ -26,7 +26,7 @@ echo "devmode is : $devmode"
 ### }}}
 ## UI Handlers ------------------------------------------------------ {{{
 
-initialcheck() { pacman -S --noconfirm --needed dialog || { echo "Check the following:\\n- Youre running an Arch based distro\\n- Youre running with root privelege\\n- Youre connected to network"; exit; } ; }
+initialcheck() { pacman -S --noconfirm --needed dialog || { echo -e "Check the following:\\n- Youre running an Arch based distro\\n- Youre running with root privelege\\n- Youre connected to network"; exit; } ; }
 
 preinstallmsg() {
     [[ $devmode = "false" ]] && dialog --title "Pre-install" --yes-label "Install" --no-label "Exit" --yesno "The install will run with the following configurations: \\n\\n- dotfiles: $dotfilesrepo\\n- Programs file: $progsfile\\n- AurHelper: $aurhelper\\n- Simulated: $simulated" 15 60 && return
@@ -68,6 +68,7 @@ getuserandpass()
 # Adds user to relevant groups and other user housekeeping
 manageuser() {
     usermod -a -G lp $1
+    usermod -a -G docker $1
 }
 
 ### }}}
@@ -116,8 +117,8 @@ manualinstall()
 # Installs from AUR
 aurinstall() 
 {
-	[[ $devmode = "false" ]] && dialog --title "LARBS Installation" --infobox "Installing \`$1\` ($n of $total) from the AUR. $1 $2." 5 70
-    [[ $devmode = "true" ]] && echo "Installing \`$1\` ($n of $total) from the AUR. $1 $2." 
+	[[ $devmode = "false" ]] && dialog --title "PIES Installation : $title" --infobox "Installing \`$1\` ($n of $total) from the AUR. $1 $2." 5 70
+    [[ $devmode = "true" ]] && echo -e "$title : Installing \`$1\` ($n of $total) from the AUR. $1 | $2." 
 	grep "^$1$" <<< "$aurinstalled" && return
 	sudo -u $name $aurhelper -S --noconfirm "$1" &>/dev/null
 }
@@ -125,10 +126,10 @@ aurinstall()
 # Function for installing from package repos
 maininstall() 
 {
-	[[ $devmode = "false" ]] && dialog --title "PIES Installation" --infobox "Installing \`$1\` ($n of $total). $1 $2." 5 70
-    [[ $devmode = "true" ]] && echo "Installing \`$1\` ($n of $total). $1 $2." 
+	[[ $devmode = "false" ]] && dialog --title "PIES Installation : $title" --infobox "Installing \`$1\` ($n of $total). $1 $2." 5 70
+    [[ $devmode = "true" ]] && echo -e "$title : Installing \`$1\` ($n of $total). $1 | $2." 
     if [ $simulated = "true" ]; then
-       sleep 2
+       sleep 1
     else
       [[ $devmode = "false" ]] && pacman --noconfirm --needed -S "$1" &>/dev/null
       [[ $devmode = "true" ]] && pacman --noconfirm --needed -S "$1"
@@ -141,11 +142,12 @@ installationloop()
 	([ -f "$progsfile" ] && cp "$progsfile" /tmp/progs.csv) || curl -Ls "$progsfile" > /tmp/progs.csv
 	total=$(wc -l < /tmp/progs.csv)
 	aurinstalled=$(pacman -Qm | awk '{print $1}')
+    title="INSTALL"
 	while IFS=, read -r tag program comment; do
       n=$((n+1))
       case "$tag" in
-        "") maininstall "$program" "$comment" ;;
-        "C") echo "Skipping comment --" ;;
+        "") [ ! "$program" ] || maininstall "$program" "$comment" ;;
+        "C") echo "Section : $program" ; title="\t -- $program" ;;
         "A") aurinstall "$program" "$comment" ;;
         "G") gitmakeinstall "$program" "$comment" ;;
       esac

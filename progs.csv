@@ -1,84 +1,98 @@
-META,IDENTIFIER,COMMENT
-C,# Essentials,-------------------
-,base-devel,basic essential packages (e.g. sudo)
-,networkmanager,handles network connection and wifi
-,xorg-server,is the graphical server
-,xorg-xdpyinfo,retrieves screen information for some scripts
-,xorg-xinit,starts the graphical server
-,mesa,
-,cronie,manages scheduled tasks
-,git,is a version control system
-,arandr,is a UI for screen adjustment
-,rxvt-unicode,A terminal emulator
-,ntp,Provides the ntpd for syncing clock
-
-C,# Libraries, ---------------------------------------------------------------
-,imlib2, library for loading images in the terminal (for ranger/w3m previews)
-
-C,# Audio Systems,-------------------
-,pulseaudio,audio system
-,pulseaudio-alsa,audio interface with alsa
-,pamixer,Terminal audio control interface
-,pulsemixer,ncurses audio controller
-
-C,# Bluetooth,-------------------
-,bluez,Bluetooth core
-,bluez-libs,Dependency libs for the bluetooth protocol stack
-,bluez-utils,Dev&Debug utils for the bluetooth protocol stack
-,blueman,Bluetooth front end
-,pulseaudio-bluetooth,Bluetooth support for pulseaudio
-
-C,# Browsing,-------------------
-,firefox,browser
-,qutebrowser,minimal vim based browser for devs
-
-C,# Window Manager & UI,-------------------
-,i3-gaps,is the main graphical user interface and window manager
-,i3blocks,is the status bar
-,i3lock,is the screen lock
-A,ttf-emojione, Gives us emojis
-,dmenu,Application launcher
-
-C,# Nice progams,-------------------
-,gimp,GNU Photoshop!
-,scrot,Screenshot program
-,arduino,Embedded prototyping platform
-,ranger,is an extensive terminal file manager that everyone likes
-,blender,3d funtimes
-,gvim,provides a build of vim with the ability to copy and paste between other programs
-A,spotify,Music streaming application and service
-A,slack-desktop,Messaging application
-,youtube-dl,Program for downloading youtube videos
-A,speedometer,Program for viewing rx/tx speed
-
-C,# Other Utilities,-------------------
-,unrar,extracts rar's
-,unzip,unzips zips
-,tmux,is a terminal multiplexer
-,w3m,is a terminal browser which can also view images
-,wget,downloads sites and files on the command line
-,mediainfo,shows audio and video information and is used by ranger as well
-A,watson,A time tracking cli program
-
-C,# Filesystems,-------------------
-,ntfs-3g,allows accessing NTFS partitions
-,dosfstools,allows your computer to access dos-like filesystems'
-,exfat-utils,allows management of FAT drives
-
-C,# Python,-------------------
-,python,Python<3
-,python-setuptools,Package management for python
-,python-pywal,Styling system
-,python-virtualenv,Changing paths for python to avoid global dependencies
-,python-pip,python package manager (using official repos)
-
-C,# Security,-------------------
-,openssh,
-,keepass,
-
-C,# Golang python,-------------------
-,python-gobject,
-,pygtk,
-,python-dbus,
-,python2-dbus,
-,nss-mdns,
+META,IDENTIFIER,COMMENT,,,
+C,# Essentials,---------------------------------------------------------------,,,
+,base-devel,basic essential packages (e.g. sudo),,,
+,networkmanager,handles network connection and wifi,,,
+,xorg-server,is the graphical server,,,
+,xorg-xdpyinfo,retrieves screen information for some scripts,,,
+,xorg-xinit,starts the graphical server,,,
+,mesa,,,,
+,cronie,manages scheduled tasks,,,
+,git,is a version control system,,,
+,arandr,is a UI for screen adjustment,,,
+,rxvt-unicode,A terminal emulator,,,
+,ntp,Provides the ntpd for syncing clock,,,
+,nss-mdns,multicast dns software,,,
+,cups,Open source printing system,,,
+,cups-pdf,For printing pdfs ,,,
+,,,,,
+C,# Libraries,---------------------------------------------------------------,,,
+,imlib2,library for loading images in the terminal (for ranger/w3m previews),,,
+,,,,,
+C,# Audio Systems,---------------------------------------------------------------,,,
+,pulseaudio,audio system,,,
+,pulseaudio-alsa,audio interface with alsa,,,
+,pamixer,Terminal audio control interface,,,
+,pulsemixer,ncurses audio controller,,,
+,,,,,
+C,# Bluetooth,---------------------------------------------------------------,,,
+,bluez,Bluetooth core,,,
+,bluez-libs,Dependency libs for the bluetooth protocol stack,,,
+,bluez-utils,Dev&Debug utils for the bluetooth protocol stack,,,
+,blueman,Bluetooth front end,,,
+,pulseaudio-bluetooth,Bluetooth support for pulseaudio,,,
+,,,,,
+C,# Multimedia,---------------------------------------------------------------,,,
+,mpv,video/gif player,,,
+,mediainfo,shows audio and video information and is used by ranger as well,,,
+,,,,,
+C,# Browsing,---------------------------------------------------------------,,,
+,firefox,browser,,,
+,qutebrowser,minimal vim based browser for devs,,,
+,,,,,
+C,# Window Manager & UI,---------------------------------------------------------------,,,
+,i3-gaps,is the main graphical user interface and window manager,,,
+,i3blocks,is the status bar,,,
+,i3lock,is the screen lock,,,
+A,ttf-emojione,Gives us emojis,,,
+,dmenu,Application launcher,,,
+,,,,,
+C,# Nice progams,---------------------------------------------------------------,,,
+,gimp,GNU Photoshop!,,,
+,scrot,Screenshot program,,,
+,arduino,Embedded prototyping platform,,,
+,ranger,is an extensive terminal file manager that everyone likes,,,
+,blender,3d funtimes,,,
+,gvim,provides a build of vim with the ability to copy and paste between other programs,,,
+A,spotify,Music streaming application and service,,,
+A,slack-desktop,Messaging application,,,
+,youtube-dl,Program for downloading youtube videos,,,
+A,speedometer,Program for viewing rx/tx speed,,,
+,docker,virtualization software,,,
+,docker-compose,simple container orchestrator,,,
+,pandoc,Document format magical tool,,,
+A,sc-im,terminal spreadsheet editor,,,
+,,,,,
+C,# Other Utilities,---------------------------------------------------------------,,,
+,unrar,extracts rar's,,,
+,unzip,unzips zips,,,
+,tmux,is a terminal multiplexer,,,
+,w3m,is a terminal browser which can also view images,,,
+,wget,downloads sites and files on the command line,,,
+A,watson,A time tracking cli program,,,
+,,,,,
+C,# Filesystems,---------------------------------------------------------------,,,
+,ntfs-3g,allows accessing NTFS partitions,,,
+,dosfstools,allows your computer to access dos-like filesystems',,,
+,exfat-utils,allows management of FAT drives,,,
+,,,,,
+C,# Python,---------------------------------------------------------------,,,
+,python,Python<3,,,
+,python-setuptools,Package management for python,,,
+,python-pywal,Styling system,,,
+,python-virtualenv,Changing paths for python to avoid global dependencies,,,
+,python-pip,python package manager (using official repos),,,
+,,,,,
+C,# Security,---------------------------------------------------------------,,,
+,openssh,ssh,,,
+,keepass,password management,,,
+,,,,,
+C,# Golang python,---------------------------------------------------------------,,,
+,python-gobject,,,,
+,pygtk,,,,
+,python-dbus,,,,
+,python2-dbus,,,,
+,,,,,
+,,,,,
+,,,,,
+,,,,,
+,,,,,
