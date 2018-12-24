@@ -15,6 +15,9 @@ esac done
 
 # DEFAULTS:
 [ -z ${dotfilesrepo+x} ] && dotfilesrepo="https://github.com/peakbreaker/.dotfiles.git"
+[ -z ${mozillarepo+x} ] && mozillarepo="https://github.com/peakbreaker/firepies.git"
+[ -z ${termrepo+x} ] && termrepo="https://github.com/peakbreaker/st.git"
+[ -z ${termfolder+x} ] && termfolder="/home/$name/Documents/Personal/st"
 [ -z ${progsfile+x} ] && progsfile="https://raw.githubusercontent.com/peakBreaker/PIES/master/progs.csv"
 [ -z ${aurhelper+x} ] && aurhelper="yay"
 [ -z ${simulated+x} ] && simulated="false"
@@ -199,6 +202,11 @@ additionalinstalls
 
 # Install the dotfiles in the user's home directory
 putgitrepo "$dotfilesrepo" "/home/$name"
+
+# Install terminal, firefox config and add blog repo
+putgitrepo "$mozillarepo" "/home/$name/.mozilla/firefox/"
+putgitrepo "$blogrepo" "/home/$name/Documents/Personal/www/Blog"
+putgitrepo "$termrepo" "$termfolder" && make clean install --directory=$termfolder
 
 # Enable services
 sudo systemctl enable bluetooth.service
