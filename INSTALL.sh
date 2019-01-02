@@ -22,6 +22,7 @@ esac done
 [ -z ${aurhelper+x} ] && aurhelper="yay"
 [ -z ${simulated+x} ] && simulated="false"
 [ -z ${devmode+x} ] && devmode="false"
+[ -z ${piesfolder+x} ] && piesfolder=$(pwd)
 
 echo "devmode is : $devmode"
 [[ $devmode = "true" ]] && echo "devmode is enabled!"
@@ -84,22 +85,6 @@ refreshkeys()
 	pacman --noconfirm -Sy archlinux-keyring &>/dev/null
 }
 
-# Downlods a gitrepo $1 and places the files in $2 only overwriting conflicts
-putgitrepo()
-{ 
-	[[ $devmode = "false" ]] && dialog --infobox "Downloading and installing dotfiles..." 4 60
-
-    # Clone git repo to temporary location
-	dir=$(mktemp -d)
-	chown -R "$name":wheel "$dir"
-	sudo -u "$name" git clone --depth 1 "$1" "$dir"/gitrepo &>/dev/null &&
-    sudo -u "$name" rm -rf "$dir"/gitrepo/.git
-
-    # Move over the files from the git repo to target
-	sudo -u "$name" mkdir -p "$2" &&
-	sudo -u "$name" cp -rT "$dir"/gitrepo "$2"
-}
-
 # Manual installs from HTTP, used only for AUR helper for now
 manualinstall() 
 {
@@ -129,7 +114,7 @@ aurinstall()
 # Function for installing from package repos
 maininstall() 
 {
-	[[ $devmode = "false" ]] && dialog --title "PIES Installation : $title" --infobox "Installing \`$1\` ($n of $total). $1 $2." 5 70
+    [[ $devmode = "false" ]] && dialog --title "PIES Installation : $title" --infobox "Installing \`$1\` ($n of $total). $1 $2." 5 70
     [[ $devmode = "true" ]] && echo -e "$title : Installing \`$1\` ($n of $total). $1 | $2." 
     if [ $simulated = "true" ]; then
        sleep 1
@@ -188,8 +173,10 @@ else
     # means we're running as sudo, get curr username
     name=$(logname)
 fi
+export name=$name
+
 manageuser $name
-[[ -z $devmode ]] && dialog --title "Usercheck" --msgbox "Proceeding to install for user : $name" 6 60
+[[ -z $devmode ]] && dialog --title "Usercheck" --msgbox "Proceeding to install for user : $name" 6 60 || echo "Proceeding to install for user : $name"
 
 # Make sure we have aurhelper installed
 manualinstall $aurhelper
@@ -200,13 +187,9 @@ installationloop
 # Additional installs
 additionalinstalls
 
-# Install the dotfiles in the user's home directory
-putgitrepo "$dotfilesrepo" "/home/$name"
-
-# Install terminal, firefox config and add blog repo
-putgitrepo "$mozillarepo" "/home/$name/.mozilla/firefox/"
-putgitrepo "$blogrepo" "/home/$name/Documents/Personal/www/Blog"
-putgitrepo "$termrepo" "$termfolder" && make clean install --directory=$termfolder
+# Install the git repos
+echo "proceeding to manage git repositories"
+$piesfolder/MANAGE_DOTFILES.sh
 
 # Enable services
 sudo systemctl enable bluetooth.service
