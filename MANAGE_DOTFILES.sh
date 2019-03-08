@@ -60,6 +60,7 @@ managedotfiles() {
     fi
 }
 
+[ -z ${name} ] && export name=$(whoami) && echo "Set name to $name"
 . loadconfig.sh && loadconfig config.ini
 [ -z ${devmode+x} ] && devmode="true"
 managedotfiles
