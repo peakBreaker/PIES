@@ -55,7 +55,7 @@ managedotfiles() {
         putgitrepo "$mozillarepo" "$mozillafolder"
         putgitrepo "$blogrepo" "$blogfolder"
         putgitrepo "$termrepo" "$termfolder" && 
-          sudo make clean install --directory=$(echo $termfolder | sed 's/"//g') &> /dev/null
+        sudo make clean install --directory=$(echo $termfolder | sed 's/"//g') &> /dev/null
         echo "DOTFILES: Install complete!"
     fi
 }
