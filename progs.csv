@@ -77,6 +77,7 @@ C,# Various Utilities,----------------------------------------------------------
 ,youtube-dl,Program for downloading youtube videos,,,
 A,speedometer,Program for viewing rx/tx speed,,,
 ,nethogs,Toplike program for viewing traffix,,,
+,kubectx,Kubernetes context manager,,,
 ,unrar,extracts rar's,,,
 ,pandoc,Document format magical tool,,,
 ,unzip,unzips zips,,,
