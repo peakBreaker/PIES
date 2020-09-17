@@ -3,7 +3,7 @@
 # vim: set foldmethod=marker
 
 ### COMMAND LINE ARGS AND VARIABLES --------------------------------- {{{
-while getopts ":a:r:p:sd" o; do case "${o}" in
+while getopts ":a:r:p:sdh" o; do case "${o}" in
 	h) echo -e "Optional arguments for custom use:\\n  -s simulate the install\\n  -r: Dotfiles repository (local file or url)\\n  -p: Dependencies and programs csv (local file or url)\\n  -a: AUR helper (must have pacman-like syntax)\\n  -d: enable devmode (no ncurses)\\n  -h: Show this message" && exit ;;
 	r) dotfilesrepo=${OPTARG} && git ls-remote "$dotfilesrepo" || exit ;;
 	p) progsfile=${OPTARG} ;;
