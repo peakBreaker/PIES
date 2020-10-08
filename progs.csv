@@ -30,6 +30,7 @@ C,# Audio Systems,--------------------------------------------------------------
 ,pulseaudio-alsa,audio interface with alsa,,,
 ,pamixer,Terminal audio control interface,,,
 ,pulsemixer,ncurses audio controller,,,
+,pavucontrol,makes managing sound easy,,,
 ,,,,,
 C,# Bluetooth,---------------------------------------------------------------,,,
 ,bluez,Bluetooth core,,,
